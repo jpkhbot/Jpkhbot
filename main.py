@@ -187,23 +187,3 @@ if __name__ == "__main__":
     except Exception as e:
         logger.error(f"Fatal error: {e}")
         raise
-if __name__ == "__main__":
-    try:
-        from keep_alive import keep_alive
-        from bot import TelegramBot
-        import os
-
-        keep_alive()
-        logger.info("Keep-alive web server started on port 3000")
-
-        token = os.getenv("TELEGRAM_BOT_TOKEN")
-        chat_id = None  # Or use int(os.getenv("TELEGRAM_CHAT_ID")) if needed
-
-        bot = TelegramBot(token, chat_id)
-        bot.app.run_polling()
-
-    except KeyboardInterrupt:
-        logger.info("Bot stopped by user")
-    except Exception as e:
-        logger.error(f"Fatal error: {e}")
-        raise
