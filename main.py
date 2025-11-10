@@ -187,3 +187,15 @@ if __name__ == "__main__":
     except Exception as e:
         logger.error(f"Fatal error: {e}")
         raise
+import os
+from bot import TelegramBot
+
+# Load token from environment
+token = os.getenv("TELEGRAM_BOT_TOKEN")
+
+# Optional: Load your Telegram chat ID if needed
+chat_id = None  # Or use int(os.getenv("TELEGRAM_CHAT_ID")) if you have it
+
+# Create and start the bot
+bot = TelegramBot(token, chat_id)
+bot.app.run_polling()
