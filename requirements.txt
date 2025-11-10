@@ -3,4 +3,4 @@ python3-discogs-client==2.6
 APScheduler==3.10.4
 python-dotenv==1.0.0
 requests==2.31.0
-flask==2.3.3
+flask
