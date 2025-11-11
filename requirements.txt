@@ -3,8 +3,8 @@ APScheduler==3.10.4
 python-telegram-bot==20.7
 python-dotenv==1.0.1
 requests==2.31.0
+discogs-client==2.6
 urllib3==2.1.0
 certifi==2023.7.22
 idna==3.4
 charset-normalizer==3.3.0
-python-discogs-client @ https://files.pythonhosted.org/packages/ba/9e/0ce65c82a1a25b1b6db59a6e1b8f7c80325f1b85924680a42a5051aa2eea/python_discogs_client-2.5.3-py3-none-any.whl
