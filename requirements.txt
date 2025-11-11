@@ -3,7 +3,7 @@ APScheduler==3.10.4
 python-telegram-bot==20.7
 python-dotenv==1.0.1
 requests==2.31.0
-discogs-client==2.6
+discogs-client==2.0.0
 urllib3==1.26.18
 certifi==2023.7.22
 idna==3.4
