@@ -1,93 +1,41 @@
-from discogs_api import search, get_release
+# discogs_handler.py
+# Version simplifiée sans python-discogs-client
+# Utilise l'API Discogs directement via HTTP (requests)
+# Nécessite : DISCOGS_USER_TOKEN dans .env
 
-# exemple d'utilisation
-def find_release(title):
-    results = search(title, qtype="release", per_page=5)
-    return results.get("results", [])
-import logging
-from typing import List, Dict
-import time
+import os
+import requests
 
-logger = logging.getLogger(__name__)
+DISCOGS_BASE = "https://can01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fapi.discogs.com%2F&data=05%7C02%7Cjean-pierre.khazzaka%40stanislas.qc.ca%7Ca655dfef514043e50cb708de220b4b79%7Ca7378fe7e83e47d79eb25163dc14739f%7C0%7C0%7C638985629089224858%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=KHgl7%2F27AFLHTgZt1Etk7I7%2BK6oGMo%2BF4es96788rvA%3D&reserved=0"
+TOKEN = os.getenv("DISCOGS_USER_TOKEN")
+
+HEADERS = {
+    "User-Agent": "JPBot/1.0",
+}
+if TOKEN:
+    HEADERS["Authorization"] = f"Discogs token={TOKEN}"
 
 
-class DiscogsHandler:
-    def __init__(self, token: str, username: str):
-        self.token = token
-        self.username = username
-        self.client = discogs_client.Client('DiscogerBot/1.0', user_token=token)
-        logger.info(f"Discogs client initialized for user: {username}")
+def search_release(query, per_page=5):
+    """Recherche un album ou single par titre"""
+    params = {"q": query, "type": "release", "per_page": per_page}
+    r = requests.get(f"{DISCOGS_BASE}/database/search", headers=HEADERS, params=params, timeout=15)
+    r.raise_for_status()
+    return r.json().get("results", [])
 
-    def get_wantlist(self) -> List[Dict]:
-        try:
-            user = self.client.user(self.username)
-            wantlist = []
-            
-            logger.info(f"Fetching wantlist for {self.username}...")
-            
-            for item in user.wantlist:
-                release = item.release
-                wantlist_item = {
-                    'release_id': str(release.id),
-                    'artist': release.artists[0].name if release.artists else 'Unknown',
-                    'title': release.title,
-                    'year': getattr(release, 'year', 'N/A'),
-                    'url': release.url,
-                    'type': 'release'
-                }
-                wantlist.append(wantlist_item)
-                time.sleep(0.5)
-            
-            logger.info(f"Found {len(wantlist)} items in wantlist")
-            return wantlist
-            
-        except Exception as e:
-            logger.error(f"Error fetching wantlist: {e}")
-            return []
 
-    def get_marketplace_listings(self, release_id: str) -> List[Dict]:
-        try:
-            release = self.client.release(release_id)
-            listings = []
-            
-            logger.debug(f"Checking marketplace for release {release_id}: {release.title}")
-            
-            try:
-                for listing in release.marketplace.listings:
-                    listing_data = {
-                        'listing_id': str(listing.id),
-                        'release_id': release_id,
-                        'price': f"{listing.price.value} {listing.price.currency}",
-                        'condition': listing.condition,
-                        'sleeve_condition': getattr(listing, 'sleeve_condition', 'N/A'),
-                        'seller_username': listing.seller.username,
-                        'seller_rating': listing.seller.rating,
-                        'ships_from': getattr(listing, 'ships_from', 'N/A'),
-                        'comments': getattr(listing, 'comments', ''),
-                        'url': listing.url,
-                        'posted': str(getattr(listing, 'posted', 'N/A'))
-                    }
-                    listings.append(listing_data)
-                    
-            except Exception as e:
-                logger.debug(f"No marketplace listings or error: {e}")
-            
-            logger.debug(f"Found {len(listings)} listings for release {release_id}")
-            return listings
-            
-        except Exception as e:
-            logger.error(f"Error fetching marketplace listings for {release_id}: {e}")
-            return []
+def get_release_info(release_id):
+    """Retourne les détails d'une release spécifique"""
+    r = requests.get(f"{DISCOGS_BASE}/releases/{release_id}", headers=HEADERS, timeout=15)
+    r.raise_for_status()
+    return r.json()
 
-    def get_release_info(self, release_id: str) -> Dict:
-        try:
-            release = self.client.release(release_id)
-            return {
-                'artist': release.artists[0].name if release.artists else 'Unknown',
-                'title': release.title,
-                'year': getattr(release, 'year', 'N/A'),
-                'url': release.url
-            }
-        except Exception as e:
-            logger.error(f"Error fetching release info for {release_id}: {e}")
-            return {}
+
+def format_release_info(data):
+    """Formate les infos pour affichage"""
+    title = data.get("title", "Unknown title")
+    artists = ", ".join([a["name"] for a in data.get("artists", [])]) if "artists" in data else "Unknown artist"
+    year = data.get("year", "N/A")
+    genres = ", ".join(data.get("genres", [])) if "genres" in data else "N/A"
+    country = data.get("country", "Unknown")
+    return f"🎵 *{title}*\n👤 {artists}\n📀 {year} • {genres}\n🌍 {country}"
