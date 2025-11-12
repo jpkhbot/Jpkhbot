@@ -22,7 +22,7 @@ class DiscogerBot:
         Config.validate()
         
         self.db = Database()
-        self.discogs = DiscogsHandler(Config.DISCOGS_TOKEN, Config.DISCOGS_USERNAME)
+        self.discogs = none
         self.bot = TelegramBot(Config.TELEGRAM_BOT_TOKEN)
         self.scheduler = AsyncIOScheduler()
         
