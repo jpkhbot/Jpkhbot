@@ -1,4 +1,4 @@
-import discogs_client
+import python_discogs_client as discogs_client
 import logging
 from typing import List, Dict
 import time
