@@ -1,4 +1,9 @@
-import python_discogs_client as discogs_client
+from discogs_api import search, get_release
+
+# exemple d'utilisation
+def find_release(title):
+    results = search(title, qtype="release", per_page=5)
+    return results.get("results", [])
 import logging
 from typing import List, Dict
 import time
