@@ -4,7 +4,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 from config import Config
 from database import Database
-from discogs_handler import DiscogsHandler
+from discogs_handler import search_release, get_release_info, format_release_info
 from bot import TelegramBot
 from keep_alive import keep_alive
 import re
