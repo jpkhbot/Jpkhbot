@@ -3,8 +3,8 @@ APScheduler==3.10.4
 python-telegram-bot==20.7
 python-dotenv==1.0.1
 requests==2.31.0
-discogs-client==2.0.0
 urllib3==1.26.18
 certifi==2023.7.22
 idna==3.4
 charset-normalizer==3.3.0
+python-discogs-client @ https://can01.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffiles.pythonhosted.org%2Fpackages%2Fba%2F9e%2F0ce65c82a1a25b1b6db59a6e1b8f7c80325f1b85924680a42a5051aa2eea%2Fpython_discogs_client-2.5.3-py3-none-any.whl&data=05%7C02%7Cjean-pierre.khazzaka%40stanislas.qc.ca%7Cd49de03c56f342828e6708de22081807%7Ca7378fe7e83e47d79eb25163dc14739f%7C0%7C0%7C638985615362866047%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=io0SnqEDSd%2Bexnis5JmcFE74Cx%2Ff2Xl8Q0H%2FpcWXPJg%3D&reserved=0
